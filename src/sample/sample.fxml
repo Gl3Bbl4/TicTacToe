@@ -30,7 +30,7 @@
                         <Insets />
                     </opaqueInsets>
                     <children>
-                        <Button fx:id="bt7" mnemonicParsing="false" prefHeight="209.0" prefWidth="186.0" textFill="WHITE" style="-fx-background-color: #fafafa;"/>
+                        <Button fx:id="bt7" mnemonicParsing="false" prefHeight="209.0" prefWidth="186.0"  style="-fx-background-color: #fafafa;"/>
                         <Button fx:id="bt8" mnemonicParsing="false" prefHeight="209.0" prefWidth="186.0" GridPane.columnIndex="1" style="-fx-background-color: #fafafa;"/>
                         <Button fx:id="bt9" mnemonicParsing="false" prefHeight="209.0" prefWidth="186.0" GridPane.columnIndex="2" style="-fx-background-color: #fafafa;"/>
                         <Button fx:id="bt4" mnemonicParsing="false" prefHeight="209.0" prefWidth="186.0" GridPane.rowIndex="1" style="-fx-background-color: #fafafa;"/>
