@@ -10,12 +10,11 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="749.0" prefWidth="569.0" style="-fx-background-color: #9C18FF;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
     <children>
         <AnchorPane layoutY="105.0" prefHeight="644.0" prefWidth="569.0" style="-fx-background-color: #fafafa;">
             <children>
-                <GridPane gridLinesVisible="true" layoutX="10.0" layoutY="80.0" opacity="0.8" prefHeight="550.0" prefWidth="550.0" style="-fx-background-insets: 0,1; -fx-border-color: #9C18FF;">
+                <GridPane fx:id="gridPane" gridLinesVisible="true" layoutX="10.0" layoutY="80.0" opacity="0.8" prefHeight="550.0" prefWidth="550.0" style="-fx-background-insets: 0,1; -fx-border-color: #9C18FF;">
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -30,15 +29,15 @@
                         <Insets />
                     </opaqueInsets>
                     <children>
-                        <Button fx:id="bt7" mnemonicParsing="false" prefHeight="209.0" prefWidth="186.0"  style="-fx-background-color: #fafafa;"/>
-                        <Button fx:id="bt8" mnemonicParsing="false" prefHeight="209.0" prefWidth="186.0" GridPane.columnIndex="1" style="-fx-background-color: #fafafa;"/>
-                        <Button fx:id="bt9" mnemonicParsing="false" prefHeight="209.0" prefWidth="186.0" GridPane.columnIndex="2" style="-fx-background-color: #fafafa;"/>
-                        <Button fx:id="bt4" mnemonicParsing="false" prefHeight="209.0" prefWidth="186.0" GridPane.rowIndex="1" style="-fx-background-color: #fafafa;"/>
-                        <Button fx:id="bt5" mnemonicParsing="false" prefHeight="209.0" prefWidth="186.0" GridPane.columnIndex="1" GridPane.rowIndex="1" style="-fx-background-color: #fafafa;"/>
-                        <Button fx:id="bt6" mnemonicParsing="false" prefHeight="209.0" prefWidth="186.0" GridPane.columnIndex="2" GridPane.rowIndex="1" style="-fx-background-color: #fafafa;"/>
-                        <Button fx:id="bt1" mnemonicParsing="false" prefHeight="209.0" prefWidth="186.0" GridPane.rowIndex="2" style="-fx-background-color: #fafafa;"/>
-                        <Button fx:id="bt2" mnemonicParsing="false" prefHeight="209.0" prefWidth="186.0" GridPane.columnIndex="1" GridPane.rowIndex="2" style="-fx-background-color: #fafafa;"/>
-                        <Button fx:id="bt3" mnemonicParsing="false" prefHeight="209.0" prefWidth="186.0" GridPane.columnIndex="2" GridPane.rowIndex="2" style="-fx-background-color: #fafafa;"/>
+                        <Button fx:id="bt7" mnemonicParsing="false" prefHeight="209.0" prefWidth="186.0" style="-fx-background-color: #fafafa;" />
+                        <Button fx:id="bt8" mnemonicParsing="false" prefHeight="209.0" prefWidth="186.0" style="-fx-background-color: #fafafa;" GridPane.columnIndex="1" />
+                        <Button fx:id="bt9" mnemonicParsing="false" prefHeight="209.0" prefWidth="186.0" style="-fx-background-color: #fafafa;" GridPane.columnIndex="2" />
+                        <Button fx:id="bt4" mnemonicParsing="false" prefHeight="209.0" prefWidth="186.0" style="-fx-background-color: #fafafa;" GridPane.rowIndex="1" />
+                        <Button fx:id="bt5" mnemonicParsing="false" prefHeight="209.0" prefWidth="186.0" style="-fx-background-color: #fafafa;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Button fx:id="bt6" mnemonicParsing="false" prefHeight="209.0" prefWidth="186.0" style="-fx-background-color: #fafafa;" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                        <Button fx:id="bt1" mnemonicParsing="false" prefHeight="209.0" prefWidth="186.0" style="-fx-background-color: #fafafa;" GridPane.rowIndex="2" />
+                        <Button fx:id="bt2" mnemonicParsing="false" prefHeight="209.0" prefWidth="186.0" style="-fx-background-color: #fafafa;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Button fx:id="bt3" mnemonicParsing="false" prefHeight="209.0" prefWidth="186.0" style="-fx-background-color: #fafafa;" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                     </children>
                 </GridPane>
                 <Button fx:id="btPlay" layoutX="401.0" layoutY="15.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="143.0" style="-fx-background-color: FF7D18;" text="Играть" textFill="WHITE">

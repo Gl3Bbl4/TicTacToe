@@ -2,11 +2,8 @@ package sample;
 
 import java.io.File;
 import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.*;
 
 import javafx.fxml.FXML;
-import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
@@ -15,13 +12,7 @@ import javafx.scene.layout.GridPane;
 public class Controller {
 
     @FXML
-    private ResourceBundle resources;
-
-    @FXML
-    private GridPane gpGrid;
-
-    @FXML
-    private URL location;
+    private GridPane gridPane;
 
     @FXML
     private Button bt7;
@@ -68,8 +59,6 @@ public class Controller {
     @FXML
     private Label lLose;
 
-    @FXML
-    private Group gRb;
 
     private Byte priorityMove = 1;
     private Byte bot = 2, player = 1;
@@ -80,9 +69,6 @@ public class Controller {
                     {0, 0, 0},
                     {0, 0, 0}
             };
-
-    private String[] sides = new String[]{"bt2", "bt4", "bt6", "bt8"};
-    private String[] conors = new String[]{"bt1", "bt3", "bt7", "bt9"};
     private Byte step = 0;
 
     @FXML
@@ -92,14 +78,13 @@ public class Controller {
         localUrl0 = file0.toURI().toURL().toString();
         localUrlX = fileX.toURI().toURL().toString();
 
-
         rb0.setSelected(false);
         rbX.setSelected(true);
 
         rb0.setOnAction(event -> change0());
         rbX.setOnAction(event -> changeX());
 
-        setGridOnOff(false);
+        setGridOnOff(true);
 
         bt1.setOnAction(event -> doMove(bt1));
         bt2.setOnAction(event -> doMove(bt2));
@@ -112,16 +97,19 @@ public class Controller {
         bt9.setOnAction(event -> doMove(bt9));
 
         btPlay.setOnAction(event -> start());
+
+
     }
 
     void start() {
         if (btPlay.getText().equals("Заново")) {
             clear();
+            return;
         } else {
             rbX.setDisable(true);
             rb0.setDisable(true);
             btPlay.setText("Заново");
-            setGridOnOff(true);
+            setGridOnOff(false);
 
         }
         if (rb0.isSelected() == true) {
@@ -137,76 +125,97 @@ public class Controller {
     }
 
     void gameEnd(String _strCheckEnd) {
-        setGridOnOff(false);
-
+        setGridOnOff(true);
         if (_strCheckEnd.equals("win_bot")) lLose.setVisible(true);
         else if (_strCheckEnd.equals("win_player")) lWin.setVisible(true);
         else lDraw.setVisible(true);
-
     }
 
     void clear() {
-        setGridOnOff(false);
+        setGridOnOff(true);
         btPlay.setText("Начать");
-        rbX.setVisible(true);
-        rb0.setVisible(true);
+        rbX.setDisable(false);
+        rb0.setDisable(false);
         priorityMove = 1;
-        Byte[][] grid =
-                {
-                        {0, 0, 0},
-                        {0, 0, 0},
-                        {0, 0, 0}
-                };
-        bt1.setStyle("-fx-background-color: #fafafa;");
-        bt1.setStyle("-fx-background-color: #fafafa;");
-        bt2.setStyle("-fx-background-color: #fafafa;");
-        bt3.setStyle("-fx-background-color: #fafafa;");
-        bt4.setStyle("-fx-background-color: #fafafa;");
-        bt5.setStyle("-fx-background-color: #fafafa;");
-        bt6.setStyle("-fx-background-color: #fafafa;");
-        bt7.setStyle("-fx-background-color: #fafafa;");
-        bt8.setStyle("-fx-background-color: #fafafa;");
-        bt9.setStyle("-fx-background-color: #fafafa;");
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                grid[i][j] = 0;
+            }
+        }
+        bot = 2;
+        player = 1;
+        step = 0;
+        setStyleOnAllButton("-fx-background-color: #fafafa;");
+        playerImg = "";
+        botImage = "";
+        strCheckEnd = "";
+        lWin.setVisible(false);
+        lLose.setVisible(false);
+        lDraw.setVisible(false);
+    }
+
+    void setStyleOnAllButton(String style) {
+        for (int i = 0; i < gridPane.getChildren().size(); i++) {
+            gridPane.getChildren().get(i).setStyle(style);
+        }
     }
 
     void switchMove() {
 
-            if (priorityMove == 1) priorityMove = 2;
-            else priorityMove = 1;
+        if (priorityMove == 1) priorityMove = 2;
+        else priorityMove = 1;
 
     }
 
     void moveBot() {
-        switch (step) {
+        int winBot = checkPossibilityToWin(bot);
+        int winPlayer = checkPossibilityToWin(player);
 
-            case 0:
-                if (checkAllZero()) {
-                    doMove(bt5);
+        if (winBot != -1 ) doMove((Button) gridPane.getChildren().get(winBot));
+        else if (winPlayer != -1) doMove((Button) gridPane.getChildren().get(winPlayer));
+        else {
+            switch (step) {
+                case 0:
+                    if (checkAllZero()) {
+                        doMove(bt5);
+                        step = 1;
+                    } else if (grid[1][1] == player) {
+                        Button bt = getRandomButtonFromList(true);
+                        doMove(bt);
+                    } else {
+                        doMove(bt5);
+                        step = 1;
+                    }
+                    break;
+                case 1:
+                    makeTrap();
+                    break;
+            }
+        }
+    }
 
-                } else if (grid[1][1] == player) {
+    void makeTrap() {
 
-                    doMove(bt7);
+    }
 
-                } else {
-                    doMove(bt5);
-
-                }
-                step++;
-                break;
-            case 1:
-
-                break;
+    Button getRandomButtonFromList(boolean true_conor) {
+        byte i = (byte) (Math.random() * 3);
+        byte j = (byte) (Math.random() * 3);
+        if (true_conor == true) {
+            if (i != 1 && j != 1 && grid[i][j]==0) {
+                return (Button) gridPane.getChildren().get(i * 3 + j);
+            } else {
+                //рекурсия если нет углов
+                return getRandomButtonFromList(true);
+            }
+        } else {
+            if ((i == 1 && j != 1 && grid[i][j]==0) || (i != 1 && j == 1 && grid[i][j]==0)) {
+                return (Button) gridPane.getChildren().get(i * 3 + j);
+            } else {
+                return getRandomButtonFromList(false);
+            }
         }
 
-    }
-
-    void makeTrap(){
-        //вилка
-    }
-
-    Button getRandomButtonFromList(Button[] buttonList) {
-        byte index = (byte) (Math.random() * 4);
-        return buttonList[index];
     }
 
     String checkEnd() {
@@ -215,14 +224,20 @@ public class Controller {
                         (grid[1][0] == player && grid[1][1] == player && grid[1][2] == player) ||
                         (grid[2][0] == player && grid[2][1] == player && grid[2][2] == player) ||
                         (grid[0][0] == player && grid[1][1] == player && grid[2][2] == player) ||
-                        (grid[2][0] == player && grid[1][1] == player && grid[0][2] == player)) {
+                        (grid[2][0] == player && grid[1][1] == player && grid[0][2] == player) ||
+                        (grid[0][0] == player && grid[1][0] == player && grid[2][0] == player) ||
+                        (grid[0][1] == player && grid[1][1] == player && grid[2][1] == player) ||
+                        (grid[2][2] == player && grid[1][2] == player && grid[0][2] == player)) {
             return "win_player";
         } else if (
                 (grid[0][0] == bot && grid[0][1] == bot && grid[0][2] == bot) ||
                         (grid[1][0] == bot && grid[1][1] == bot && grid[1][2] == bot) ||
                         (grid[2][0] == bot && grid[2][1] == bot && grid[2][2] == bot) ||
                         (grid[0][0] == bot && grid[1][1] == bot && grid[2][2] == bot) ||
-                        (grid[2][0] == bot && grid[1][1] == bot && grid[0][2] == bot)) {
+                        (grid[2][0] == bot && grid[1][1] == bot && grid[0][2] == bot) ||
+                        (grid[0][0] == bot && grid[1][0] == bot && grid[2][0] == bot) ||
+                        (grid[0][1] == bot && grid[1][1] == bot && grid[2][1] == bot) ||
+                        (grid[2][2] == bot && grid[1][2] == bot && grid[0][2] == bot)) {
             return "win_bot";
         } else if (!checkAnyZero()) return "draw";
         else return "null";
@@ -246,10 +261,17 @@ public class Controller {
         return true;
     }
 
-    void checkPossibilityToWin(int X_O) {
-        switch (X_O) {
-            case 0:
+    int checkPossibilityToWin(byte X_O) {
+        for (byte i = 0; i < grid.length; i++) {
+            for (byte j = 0; j < grid[i].length; j++) {
+                if ((grid[i][j] == 0 && grid[i][(j + 1) % 3] == X_O && grid[i][(j + 2) % 3] == X_O) ||
+                        (grid[i][j] == 0 && grid[(i + 1) % 3][j] == X_O && grid[(i + 2) % 3][j] == X_O) ||
+                        (grid[i][j] == 0 && grid[(i + 1) % 3][(j + 1) % 3] == X_O && grid[(i + 2) % 3][(j + 2) % 3] == X_O)) {
+                    return i * 3 + j;
+                }
+            }
         }
+        return -1;
     }
 
     void change0() {
@@ -281,12 +303,11 @@ public class Controller {
             switchMove();
         }
         strCheckEnd = checkEnd();
-        if (strCheckEnd!= "null") {
+        if (strCheckEnd != "null") {
             gameEnd(strCheckEnd);
         }
 
     }
-
 
     void setGridPosition(Button bt, Byte X_0) {
         if (bt.equals(bt1)) {
@@ -311,15 +332,9 @@ public class Controller {
     }
 
     void setGridOnOff(Boolean status) {
-        bt1.setVisible(status);
-        bt2.setVisible(status);
-        bt3.setVisible(status);
-        bt4.setVisible(status);
-        bt5.setVisible(status);
-        bt6.setVisible(status);
-        bt7.setVisible(status);
-        bt8.setVisible(status);
-        bt9.setVisible(status);
+        for (int i = 0; i < gridPane.getChildren().size(); i++) {
+            gridPane.getChildren().get(i).setDisable(status);
+        }
     }
 }
 
