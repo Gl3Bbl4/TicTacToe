@@ -71,16 +71,11 @@ public class Controller {
             };
     private Byte step = 0;
 
-    private enum pos {
-
-    }
-
-    ;
 
     @FXML
     void initialize() throws MalformedURLException {
-        File file0 = new File("C:/TicTacToe/src/resources/0.jpg");
-        File fileX = new File("C:/TicTacToe/src/resources/X.png");
+        File file0 = new File("C:/Project/TicTacToe/src/resources/0.jpg");
+        File fileX = new File("C:/Project/TicTacToe/src/resources/X.png");
         localUrl0 = file0.toURI().toURL().toString();
         localUrlX = fileX.toURI().toURL().toString();
 
@@ -91,7 +86,7 @@ public class Controller {
         rbX.setOnAction(event -> changeX());
 
         setGridOnOff(true);
-
+        setGridDVisible(false);
         bt1.setOnAction(event -> doMove(bt1));
         bt2.setOnAction(event -> doMove(bt2));
         bt3.setOnAction(event -> doMove(bt3));
@@ -108,6 +103,7 @@ public class Controller {
     }
 
     void start() {
+
         if (btPlay.getText().equals("Заново")) {
             clear();
             return;
@@ -116,6 +112,7 @@ public class Controller {
             rb0.setDisable(true);
             btPlay.setText("Заново");
             setGridOnOff(false);
+            setGridDVisible(true);
 
         }
         if (rb0.isSelected() == true) {
@@ -138,6 +135,7 @@ public class Controller {
     }
 
     void clear() {
+        setGridDVisible(false);
         setGridOnOff(true);
         btPlay.setText("Начать");
         rbX.setDisable(false);
@@ -188,49 +186,75 @@ public class Controller {
                     } else if (grid[1][1] == player) {
                         Button bt = getRandomButtonFromList(true, null);
                         doMove(bt);
-                        step = 2;
+                        step = 3;
                     } else {
                         doMove(bt5);
-                        step = 1;
+                        step = 2;
                     }
                     break;
                 case 1:
                     Button bt = makeTrap(player);
                     doMove(bt);
+                    step = 2;
                     break;
                 case 2:
+                    int lastPlaces = checkLastPlaces(bot);
+
+                        doMove((Button) gridPane.getChildren().get(lastPlaces));
 
                     break;
             }
         }
     }
 
+    int checkLastPlaces(byte X_O) {
+
+        byte[] arr = new byte[8];
+        byte k = 0;
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                if ((grid[i][j] == 0 && grid[i][(j + 1) % 3] == 0 && (grid[i][(j + 2) % 3] == X_O || grid[i][(j + 2) % 3] == 0)) ||
+                        (grid[i][j] == 0 && grid[(i + 1) % 3][j] == 0 && (grid[(i + 2) % 3][j] == X_O || grid[(i + 2) % 3][j] == 0)) ||
+                        (i == j && grid[i][j] == 0 && grid[(i + 1) % 3][(j + 1) % 3] == 0 && (grid[(i + 2) % 3][(j + 2) % 3] == X_O || grid[(i + 2) % 3][(j + 2) % 3] == 0)) ||
+                        (((i == 0 && j == 2) || (i == j) || (i == 2 && j == 0)) && grid[i][j] == 0 && grid[(i + 1) % 3][(j + 2) % 3] == 0 && (grid[(i + 2) % 3][(j + 4) % 3] == X_O || grid[(i + 2) % 3][(j + 4) % 3] == 0))) {
+                    return i * 3 + j;
+                } else if (grid[i][j] == 0) {
+                    arr[k] = (byte) (i * 3 + j);
+                    k++;
+                }
+            }
+        }
+
+
+        return gridPane.getChildren().get(getRandomButtonFromList(true, arr) );
+    }
+
     Button makeTrap(byte X_0) {
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[i].length; j++) {
                 if (grid[i][j] == X_0 && (i * 3 + j) % 2 == 0) {
-                    byte[] arrConor = new byte[2];
-                    if (i == 0) arrConor[0] = (byte) (((i + 2) % 3) * 3 + j);
-                    else arrConor[0] = (byte) (((i + 1) % 3) * 3 + j);
-                    if (j == 0) arrConor[1] = (byte) (((j + 2) % 3) + 3 * i);
-                    else arrConor[1] = (byte) (((j + 1) % 3) + 3 * i);
-                    return getRandomButtonFromList(true, arrConor);
+                    byte[] arrConnor = new byte[2];
+                    if (i == 0) arrConnor[0] = (byte) (((i + 2) % 3) * 3 + j);
+                    else arrConnor[0] = (byte) (((i + 1) % 3) * 3 + j);
+                    if (j == 0) arrConnor[1] = (byte) (((j + 2) % 3) + 3 * i);
+                    else arrConnor[1] = (byte) (((j + 1) % 3) + 3 * i);
+                    return getRandomButtonFromList(true, arrConnor);
                 } else if (grid[i][j] == X_0) {
                     byte[] arrSide = new byte[2];
                     if (i == 0) {
                         arrSide[0] = (byte) 8;
                         arrSide[1] = (byte) 6;
-                    } else if(i==1 && j==0) {
+                    } else if (i == 1 && j == 0) {
                         arrSide[0] = (byte) 2;
                         arrSide[1] = (byte) 8;
-                    } else if(i==1 && j==2) {
+                    } else if (i == 1 && j == 2) {
                         arrSide[0] = (byte) 0;
                         arrSide[1] = (byte) 6;
                     } else {
                         arrSide[0] = (byte) 0;
                         arrSide[1] = (byte) 2;
                     }
-                     return getRandomButtonFromList(true, arrSide);
+                    return getRandomButtonFromList(true, arrSide);
                 }
             }
         }
@@ -246,17 +270,21 @@ public class Controller {
                 if (i != 1 && j != 1 && grid[i][j] == 0) {
                     return (Button) gridPane.getChildren().get(i * 3 + j);
                 } else {
-                    return getRandomButtonFromList(true, arr);
+                    return getRandomButtonFromList(true, null);
                 }
             } else {
                 if ((i == 1 && j != 1 && grid[i][j] == 0) || (i != 1 && j == 1 && grid[i][j] == 0)) {
                     return (Button) gridPane.getChildren().get(i * 3 + j);
                 } else {
-                    return getRandomButtonFromList(false, arr);
+                    return getRandomButtonFromList(false, null);
                 }
             }
         } else {
-            byte k = (byte) (Math.random() * arr.length);
+            byte k;
+            do {
+                k = (byte) (Math.random() * arr.length);
+            }
+            while (arr[k] != 0);
             return (Button) gridPane.getChildren().get(arr[k]);
         }
 
@@ -379,6 +407,12 @@ public class Controller {
     void setGridOnOff(Boolean status) {
         for (int i = 0; i < gridPane.getChildren().size(); i++) {
             gridPane.getChildren().get(i).setDisable(status);
+        }
+    }
+
+    void setGridDVisible(Boolean status) {
+        for (int i = 0; i < gridPane.getChildren().size(); i++) {
+            gridPane.getChildren().get(i).setVisible(status);
         }
     }
 }
