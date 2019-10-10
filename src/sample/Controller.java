@@ -75,8 +75,8 @@ public class Controller {
 
     @FXML
     void initialize() throws MalformedURLException {
-        File file0 = new File("C:/Project/TicTacToe/src/resources/0.jpg");
-        File fileX = new File("C:/Project/TicTacToe/src/resources/X.png");
+        File file0 = new File("C:/TicTacToe/src/resources/0.jpg");
+        File fileX = new File("C:/TicTacToe/src/resources/X.png");
         localUrl0 = file0.toURI().toURL().toString();
         localUrlX = fileX.toURI().toURL().toString();
 
